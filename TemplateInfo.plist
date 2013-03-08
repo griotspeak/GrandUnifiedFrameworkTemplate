@@ -84,6 +84,13 @@
 				<string>-ObjC</string>
 				<key>SKIP_INSTALL</key>
 				<string>YES</string>
+                                <key>DEAD_CODE_STRIPPING</key>
+                                <string>NO</string>
+                                <key>COPY_PHASE_STRIP</key>
+                                <string>NO</string>
+                                <key>STRIP_STYLE</key>
+                                <string>non-global</string>
+                                
 			</dict>
 			<key>BuildPhases</key>
 			<array>
@@ -132,6 +139,13 @@
 				<string>-ObjC</string>
 				<key>SKIP_INSTALL</key>
 				<string>YES</string>
+                                <key>DEAD_CODE_STRIPPING</key>
+                                <string>NO</string>
+                                <key>COPY_PHASE_STRIP</key>
+                                <string>NO</string>
+                                <key>STRIP_STYLE</key>
+                                <string>non-global</string>
+                                
 			</dict>
 			<key>BuildPhases</key>
 			<array>
