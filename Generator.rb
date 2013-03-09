@@ -49,8 +49,6 @@ START_PROJECT_SECTION
 project_settings = <<PROJECT_SETTINGS
   <key>SharedSettings</key>
   <dict>
-  <key>PRODUCT_NAME</key>
-  <string>${PROJECT_NAME}</string>
   </dict>
 PROJECT_SETTINGS
 end_project_section = <<END_PROJECT_SECTION
@@ -140,8 +138,7 @@ shared_stuff_1 = <<SHARED_STUFF_1
         <key>PUBLIC_HEADERS_FOLDER_PATH</key>
         <string>include/$(PRODUCT_NAME)</string>
         <key>PRODUCT_NAME</key>
-        <string>${PRODUCT_NAME}</string>
-        
+        <string>$(TARGET_NAME)</string>
 			</dict>
 			<key>BuildPhases</key>
 			<array>
@@ -170,18 +167,18 @@ shared_stuff_1 = <<SHARED_STUFF_1
         <string>
         set -e
 
-        mkdir -p "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers"
-        mkdir -p "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Resources"
+        mkdir -p "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Headers"
+        mkdir -p "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Resources"
 
         # Link the "Current" version to "A"
-        /bin/ln -sfh A "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current"
-        /bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers"
-        /bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Resources"
-        /bin/ln -sfh "Versions/Current/${PRODUCT_NAME}" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}"
+        /bin/ln -sfh A "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/Current"
+        /bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Headers"
+        /bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Resources"
+        /bin/ln -sfh "Versions/Current/${PROJECT_NAME}" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/${PROJECT_NAME}"
 
         # The -a ensures that the headers maintain the source modification date so that we don't constantly
         # cause propagating rebuilds of files that import these headers.
-        /bin/cp -a "${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers"
+        /bin/cp -a "${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Headers"
         </string>
         </dict>
 			</array>
@@ -263,6 +260,8 @@ bundle_target = <<BUNDLE_TARGET
     <string>iphonesimulator iphoneos macosx</string>
     <key>VALID_ARCHS</key>
     <string>i386 x86_64 arm7 arm7s</string>
+    <key>PRODUCT_NAME</key>
+    <string>$(TARGET_NAME)</string>
 	</dict>
 	<key>BuildPhases</key>
 	<array>
@@ -314,11 +313,11 @@ allTheThings = [
   mac_ancestors,
   shared_stuff_1,
   end_mac_target,
+  bundle_target,
   start_aggregate_target,
   aggregate_name,
   aggregate_ancestors,
   end_aggregate_target,
-  bundle_target,
   end_targets,
   footer]
 
