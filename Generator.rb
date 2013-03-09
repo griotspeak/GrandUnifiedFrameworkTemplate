@@ -213,6 +213,34 @@ MAC_ANCESTORS
 end_mac_target = <<END_MAC_TARGET
 		</dict>
 END_MAC_TARGET
+start_aggregate_target = <<START_AGGREGATE_TARGET
+		<dict>
+START_AGGREGATE_TARGET
+aggregate_name = <<AGGREGATE_NAME    
+			<key>Name</key>
+			<string>Framework</string>
+AGGREGATE_NAME
+aggregate_ancestors = <<AGGREGATE_ANCESTORS
+			<key>Ancestors</key>
+			<array>
+				<string>com.apple.dt.unit.base</string>
+				<string>com.apple.dt.unit.aggregate</string>
+			</array>
+      <key>BuildPhases</key>
+      <array>
+          <dict>
+              <key>Class</key>
+              <string>ShellScript</string>
+              <key>ShellPath</key>
+              <string>/bin/sh</string>
+              <key>ShellScript</key>
+              <string># Just a comment</string>
+          </dict>
+      </array>
+AGGREGATE_ANCESTORS
+end_aggregate_target = <<END_AGGREGATE_TARGET
+		</dict>
+END_AGGREGATE_TARGET
 end_targets = <<END_TARGETS
 	</array>
 END_TARGETS
@@ -244,5 +272,9 @@ puts mac_name
 puts mac_ancestors
 puts shared_stuff_1
 puts end_mac_target
+puts start_aggregate_target
+puts aggregate_name
+puts aggregate_ancestors
+puts end_aggregate_target
 puts end_targets
 puts footer

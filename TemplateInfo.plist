@@ -237,6 +237,26 @@
 			<key>ProductType</key>
 			<string>com.apple.product-type.library.static</string>
 		</dict>
+		<dict>
+			<key>Name</key>
+			<string>Framework</string>
+			<key>Ancestors</key>
+			<array>
+				<string>com.apple.dt.unit.base</string>
+				<string>com.apple.dt.unit.aggregate</string>
+			</array>
+      <key>BuildPhases</key>
+      <array>
+          <dict>
+              <key>Class</key>
+              <string>ShellScript</string>
+              <key>ShellPath</key>
+              <string>/bin/sh</string>
+              <key>ShellScript</key>
+              <string># Just a comment</string>
+          </dict>
+      </array>
+		</dict>
 	</array>
 </dict>
 </plist>
