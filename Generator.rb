@@ -8,6 +8,7 @@ ancestors = <<ANCESTORS
 	<key>Ancestors</key>
 	<array>
 		<string>com.apple.dt.unit.base</string>
+    <string>com.apple.dt.unit.iOSReferenceCounting</string>
 	</array>
 ANCESTORS
 is_concrete = <<IS_CONCRETE
@@ -190,6 +191,13 @@ shared_stuff_1 = <<SHARED_STUFF_1
 			<key>ProductType</key>
 			<string>com.apple.product-type.library.static</string>
 SHARED_STUFF_1
+ios_dependencies = <<IOS_DEPENDENCIES
+<key>Dependencies</key>
+<array>
+        <integer>1</integer>
+        <integer>2</integer>
+</array>
+IOS_DEPENDENCIES
 end_ios_target = <<END_IOS_TARGET
 		</dict>
 END_IOS_TARGET
@@ -209,6 +217,13 @@ mac_ancestors = <<MAC_ANCESTORS
 			</array>
 MAC_ANCESTORS
 #SHARED_STUFF_1 goes here as well
+mac_dependencies = <<MAC_DEPENDENCIES
+<key>Dependencies</key>
+<array>
+        <integer>0</integer>
+        <integer>2</integer>
+</array>
+MAC_DEPENDENCIES
 end_mac_target = <<END_MAC_TARGET
 		</dict>
 END_MAC_TARGET
@@ -307,11 +322,13 @@ allTheThings = [
   ios_name,
   ios_ancestors,
   shared_stuff_1,
+  ios_dependencies,
   end_ios_target,
   start_mac_target,
   mac_name,
   mac_ancestors,
   shared_stuff_1,
+  mac_dependencies,
   end_mac_target,
   bundle_target,
   start_aggregate_target,
