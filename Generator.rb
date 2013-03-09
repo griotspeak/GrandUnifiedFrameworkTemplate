@@ -41,6 +41,22 @@ kind = <<KIND
 	<key>Kind</key>
 	<string>Xcode.Xcode3.ProjectTemplateUnitKind</string>
 KIND
+start_project_section = <<START_PROJECT_SECTION
+  <key>Project</key>
+  <dict>
+START_PROJECT_SECTION
+
+project_settings = <<PROJECT_SETTINGS
+  <key>SharedSettings</key>
+  <dict>
+  <key>PRODUCT_NAME</key>
+  <string>${PROJECT_NAME}</string>
+  </dict>
+PROJECT_SETTINGS
+end_project_section = <<END_PROJECT_SECTION
+  </dict>
+END_PROJECT_SECTION
+
 nodes = <<NODES
 	<key>Nodes</key>
 	<array>
@@ -115,13 +131,17 @@ shared_stuff_1 = <<SHARED_STUFF_1
 				<string>-ObjC</string>
 				<key>SKIP_INSTALL</key>
 				<string>YES</string>
-                                <key>DEAD_CODE_STRIPPING</key>
-                                <string>NO</string>
-                                <key>COPY_PHASE_STRIP</key>
-                                <string>NO</string>
-                                <key>STRIP_STYLE</key>
-                                <string>non-global</string>
-                                
+        <key>DEAD_CODE_STRIPPING</key>
+        <string>NO</string>
+        <key>COPY_PHASE_STRIP</key>
+        <string>NO</string>
+        <key>STRIP_STYLE</key>
+        <string>non-global</string>
+        <key>PUBLIC_HEADERS_FOLDER_PATH</key>
+        <string>include/$(PRODUCT_NAME)</string>
+        <key>PRODUCT_NAME</key>
+        <string>${PRODUCT_NAME}</string>
+        
 			</dict>
 			<key>BuildPhases</key>
 			<array>
@@ -141,6 +161,27 @@ shared_stuff_1 = <<SHARED_STUFF_1
 					<key>DstSubfolderSpec</key>
 					<integer>16</integer>
 				</dict>
+        <dict>
+        <key>Class</key>
+        <string>ShellScript</string>
+        <key>ShellPath</key>
+        <string>/bin/sh</string>
+        <key>ShellScript</key>
+        <string>
+        set -e
+
+        mkdir -p "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers"
+
+        # Link the "Current" version to "A"
+        /bin/ln -sfh A "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current"
+        /bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers"
+        /bin/ln -sfh "Versions/Current/${PRODUCT_NAME}" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}"
+
+        # The -a ensures that the headers maintain the source modification date so that we don't constantly
+        # cause propagating rebuilds of files that import these headers.
+        /bin/cp -a "${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers"
+        </string>
+        </dict>
 			</array>
 
 			<key>Frameworks</key>
@@ -186,6 +227,9 @@ puts is_concrete
 puts definitions
 puts description
 puts identifier
+puts start_project_section
+puts project_settings
+puts end_project_section
 puts kind
 puts nodes
 puts options
