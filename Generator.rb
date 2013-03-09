@@ -216,24 +216,6 @@ end_mac_target = <<END_MAC_TARGET
 		</dict>
 END_MAC_TARGET
 
-start_bundle_target = <<START_BUNDLE_TARGET
-    <dict>
-START_BUNDLE_TARGET
-
-bundle_name = <<BUNDLE_NAME
-      <key>Name</key>
-      <string>Bundle<string>
-BUNDLE_NAME
-bundle_ancestors = <<BUNDLE_ANCESTORS
-<key>Ancestors</key>
-<array>
-	<string>com.apple.dt.unit.base</string>
-	<string>com.apple.dt.unit.bundleBase</string>
-</array>
-BUNDLE_ANCESTORS
-end_bundle_target = <<END_BUNDLE_TARGET
-    </dict>
-END_BUNDLE_TARGET
 start_aggregate_target = <<START_AGGREGATE_TARGET
 		<dict>
 START_AGGREGATE_TARGET
@@ -262,6 +244,44 @@ AGGREGATE_ANCESTORS
 end_aggregate_target = <<END_AGGREGATE_TARGET
 		</dict>
 END_AGGREGATE_TARGET
+
+bundle_target = <<BUNDLE_TARGET
+<dict>
+  <key>Name</key>
+  <string>___PACKAGENAMEASIDENTIFIER___Resources</string>
+	<key>ProductType</key>
+	<string>com.apple.product-type.bundle</string>
+	<key>SharedSettings</key>
+	<dict>
+		<key>INSTALL_PATH</key>
+		<string>$(LOCAL_LIBRARY_DIR)/Bundles</string>
+		<key>WRAPPER_EXTENSION</key>
+		<string>bundle</string>
+		<key>COMBINE_HIDPI_IMAGES</key>
+		<string>YES</string>
+    <key>SUPPORTED_PLATFORMS</key>
+    <string>iphonesimulator iphoneos macosx</string>
+    <key>VALID_ARCHS</key>
+    <string>i386 x86_64 arm7 arm7s</string>
+	</dict>
+	<key>BuildPhases</key>
+	<array>
+		<dict>
+			<key>Class</key>
+			<string>Sources</string>
+		</dict>
+		<dict>
+			<key>Class</key>
+			<string>Frameworks</string>
+		</dict>
+		<dict>
+			<key>Class</key>
+			<string>Resources</string>
+		</dict>
+	</array>
+</dict>
+BUNDLE_TARGET
+
 end_targets = <<END_TARGETS
 	</array>
 END_TARGETS
@@ -298,10 +318,7 @@ allTheThings = [
   aggregate_name,
   aggregate_ancestors,
   end_aggregate_target,
-  # start_bundle_target,
-  # bundle_name,
-  # bundle_ancestors,
-  # end_bundle_target,
+  bundle_target,
   end_targets,
   footer]
 
