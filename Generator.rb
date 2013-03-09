@@ -171,10 +171,12 @@ shared_stuff_1 = <<SHARED_STUFF_1
         set -e
 
         mkdir -p "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers"
+        mkdir -p "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Resources"
 
         # Link the "Current" version to "A"
         /bin/ln -sfh A "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current"
         /bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers"
+        /bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Resources"
         /bin/ln -sfh "Versions/Current/${PRODUCT_NAME}" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}"
 
         # The -a ensures that the headers maintain the source modification date so that we don't constantly
@@ -213,6 +215,25 @@ MAC_ANCESTORS
 end_mac_target = <<END_MAC_TARGET
 		</dict>
 END_MAC_TARGET
+
+start_bundle_target = <<START_BUNDLE_TARGET
+    <dict>
+START_BUNDLE_TARGET
+
+bundle_name = <<BUNDLE_NAME
+      <key>Name</key>
+      <string>Bundle<string>
+BUNDLE_NAME
+bundle_ancestors = <<BUNDLE_ANCESTORS
+<key>Ancestors</key>
+<array>
+	<string>com.apple.dt.unit.base</string>
+	<string>com.apple.dt.unit.bundleBase</string>
+</array>
+BUNDLE_ANCESTORS
+end_bundle_target = <<END_BUNDLE_TARGET
+    </dict>
+END_BUNDLE_TARGET
 start_aggregate_target = <<START_AGGREGATE_TARGET
 		<dict>
 START_AGGREGATE_TARGET
@@ -249,32 +270,39 @@ footer = <<FOOTER
 </plist>
 FOOTER
 
-puts header
-puts ancestors
-puts is_concrete
-puts definitions
-puts description
-puts identifier
-puts start_project_section
-puts project_settings
-puts end_project_section
-puts kind
-puts nodes
-puts options
-puts start_targets
-puts start_ios_target
-puts ios_name
-puts ios_ancestors
-puts shared_stuff_1
-puts end_ios_target
-puts start_mac_target
-puts mac_name
-puts mac_ancestors
-puts shared_stuff_1
-puts end_mac_target
-puts start_aggregate_target
-puts aggregate_name
-puts aggregate_ancestors
-puts end_aggregate_target
-puts end_targets
-puts footer
+allTheThings = [
+  header,
+  ancestors,
+  is_concrete,
+  definitions,
+  description,
+  identifier,
+  start_project_section,
+  project_settings,
+  end_project_section,
+  kind,
+  nodes,
+  options,
+  start_targets,
+  start_ios_target,
+  ios_name,
+  ios_ancestors,
+  shared_stuff_1,
+  end_ios_target,
+  start_mac_target,
+  mac_name,
+  mac_ancestors,
+  shared_stuff_1,
+  end_mac_target,
+  start_aggregate_target,
+  aggregate_name,
+  aggregate_ancestors,
+  end_aggregate_target,
+  # start_bundle_target,
+  # bundle_name,
+  # bundle_ancestors,
+  # end_bundle_target,
+  end_targets,
+  footer]
+
+puts allTheThings
