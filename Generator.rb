@@ -261,14 +261,6 @@ FW_RES_BUNDLE_CONTENTS_PATH="${FW_RES_BUNDLE_PATH}/Contents/Resources"
 cp -R "${FW_RES_BUNDLE_CONTENTS_PATH}/" ${FW_RESOURCE_DIRECTORY}          
           </string>
         </dict>
-          <dict>
-              <key>Class</key>
-              <string>ShellScript</string>
-              <key>ShellPath</key>
-              <string>/bin/sh</string>
-              <key>ShellScript</key>
-              <string># Just a comment</string>
-          </dict>
       </array>
 AGGREGATE_ANCESTORS
 end_aggregate_target = <<END_AGGREGATE_TARGET
