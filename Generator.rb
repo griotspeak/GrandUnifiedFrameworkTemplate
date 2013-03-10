@@ -258,7 +258,10 @@ mkdir -p ${FW_RESOURCE_DIRECTORY}
 # Copy resources
 FW_RES_BUNDLE_PATH="${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}_Resources.bundle"
 FW_RES_BUNDLE_CONTENTS_PATH="${FW_RES_BUNDLE_PATH}/Contents/Resources"
-cp -R "${FW_RES_BUNDLE_CONTENTS_PATH}/" ${FW_RESOURCE_DIRECTORY}          
+
+if [ -d ${FW_RES_BUNDLE_PATH} ]; then
+  cp -R "${FW_RES_BUNDLE_CONTENTS_PATH}/" ${FW_RESOURCE_DIRECTORY}
+fi        
           </string>
         </dict>
       </array>
