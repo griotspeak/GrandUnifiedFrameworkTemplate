@@ -240,20 +240,25 @@ aggregate_ancestors = <<AGGREGATE_ANCESTORS
           <string>Create folder structure</string>
           <key>ShellScript</key>
           <string>
-          set -e
+#Create folder structure
+set -e
 
-          mkdir -p "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Headers"
-          mkdir -p "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Resources"
+FW_HEADER_DIRECTORY="${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Headers"
+FW_RESOURCE_DIRECTORY="${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Resources"
 
-          # Link the "Current" version to "A"
-          /bin/ln -sfh A "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/Current"
-          /bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Headers"
-          /bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Resources"
-          /bin/ln -sfh "Versions/Current/${PROJECT_NAME}" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/${PROJECT_NAME}"
+mkdir -p ${FW_HEADER_DIRECTORY}
+mkdir -p ${FW_RESOURCE_DIRECTORY}
 
-          # The -a ensures that the headers maintain the source modification date so that we don't constantly
-          # cause propagating rebuilds of files that import these headers.
-          /bin/cp -a "${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Headers"
+# Link the "Current" version to "A"
+/bin/ln -sfh A "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/Current"
+/bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Headers"
+/bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Resources"
+/bin/ln -sfh "Versions/Current/${PROJECT_NAME}" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/${PROJECT_NAME}"
+
+# Copy resources
+FW_RES_BUNDLE_PATH="${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}_Resources.bundle"
+FW_RES_BUNDLE_CONTENTS_PATH="${FW_RES_BUNDLE_PATH}/Contents/Resources"
+cp -R "${FW_RES_BUNDLE_CONTENTS_PATH}/" ${FW_RESOURCE_DIRECTORY}          
           </string>
         </dict>
           <dict>
@@ -291,6 +296,11 @@ bundle_target = <<BUNDLE_TARGET
     <key>PRODUCT_NAME</key>
     <string>$(TARGET_NAME)</string>
 	</dict>
+  <key>Configurations</key> <!-- Target Configuration -->
+          <dict>
+              <key>Release</key>
+              <dict></dict>
+          </dict>
 	<key>BuildPhases</key>
 	<array>
 		<dict>
