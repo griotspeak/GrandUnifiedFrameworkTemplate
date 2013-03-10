@@ -159,29 +159,6 @@ shared_stuff_1 = <<SHARED_STUFF_1
 					<key>DstSubfolderSpec</key>
 					<integer>16</integer>
 				</dict>
-        <dict>
-        <key>Class</key>
-        <string>ShellScript</string>
-        <key>ShellPath</key>
-        <string>/bin/sh</string>
-        <key>ShellScript</key>
-        <string>
-        set -e
-
-        mkdir -p "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Headers"
-        mkdir -p "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Resources"
-
-        # Link the "Current" version to "A"
-        /bin/ln -sfh A "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/Current"
-        /bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Headers"
-        /bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Resources"
-        /bin/ln -sfh "Versions/Current/${PROJECT_NAME}" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/${PROJECT_NAME}"
-
-        # The -a ensures that the headers maintain the source modification date so that we don't constantly
-        # cause propagating rebuilds of files that import these headers.
-        /bin/cp -a "${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Headers"
-        </string>
-        </dict>
 			</array>
 
 			<key>Frameworks</key>
@@ -194,7 +171,6 @@ SHARED_STUFF_1
 ios_dependencies = <<IOS_DEPENDENCIES
 <key>Dependencies</key>
 <array>
-        <integer>1</integer>
         <integer>2</integer>
 </array>
 IOS_DEPENDENCIES
@@ -220,7 +196,6 @@ MAC_ANCESTORS
 mac_dependencies = <<MAC_DEPENDENCIES
 <key>Dependencies</key>
 <array>
-        <integer>0</integer>
         <integer>2</integer>
 </array>
 MAC_DEPENDENCIES
@@ -256,6 +231,31 @@ aggregate_ancestors = <<AGGREGATE_ANCESTORS
       </dict>
       <key>BuildPhases</key>
       <array>
+        <dict>
+          <key>Class</key>
+          <string>ShellScript</string>
+          <key>ShellPath</key>
+          <string>/bin/sh</string>
+          <key>Name</key>
+          <string>Create folder structure</string>
+          <key>ShellScript</key>
+          <string>
+          set -e
+
+          mkdir -p "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Headers"
+          mkdir -p "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Resources"
+
+          # Link the "Current" version to "A"
+          /bin/ln -sfh A "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/Current"
+          /bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Headers"
+          /bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Resources"
+          /bin/ln -sfh "Versions/Current/${PROJECT_NAME}" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/${PROJECT_NAME}"
+
+          # The -a ensures that the headers maintain the source modification date so that we don't constantly
+          # cause propagating rebuilds of files that import these headers.
+          /bin/cp -a "${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Headers"
+          </string>
+        </dict>
           <dict>
               <key>Class</key>
               <string>ShellScript</string>
@@ -273,7 +273,7 @@ END_AGGREGATE_TARGET
 bundle_target = <<BUNDLE_TARGET
 <dict>
   <key>Name</key>
-  <string>___PACKAGENAMEASIDENTIFIER___Resources</string>
+  <string>___PACKAGENAMEASIDENTIFIER____Resources</string>
 	<key>ProductType</key>
 	<string>com.apple.product-type.bundle</string>
 	<key>SharedSettings</key>

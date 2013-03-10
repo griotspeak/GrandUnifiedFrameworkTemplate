@@ -124,29 +124,6 @@
 					<key>DstSubfolderSpec</key>
 					<integer>16</integer>
 				</dict>
-        <dict>
-        <key>Class</key>
-        <string>ShellScript</string>
-        <key>ShellPath</key>
-        <string>/bin/sh</string>
-        <key>ShellScript</key>
-        <string>
-        set -e
-
-        mkdir -p "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Headers"
-        mkdir -p "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Resources"
-
-        # Link the "Current" version to "A"
-        /bin/ln -sfh A "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/Current"
-        /bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Headers"
-        /bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Resources"
-        /bin/ln -sfh "Versions/Current/${PROJECT_NAME}" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/${PROJECT_NAME}"
-
-        # The -a ensures that the headers maintain the source modification date so that we don't constantly
-        # cause propagating rebuilds of files that import these headers.
-        /bin/cp -a "${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Headers"
-        </string>
-        </dict>
 			</array>
 
 			<key>Frameworks</key>
@@ -157,7 +134,6 @@
 			<string>com.apple.product-type.library.static</string>
 <key>Dependencies</key>
 <array>
-        <integer>1</integer>
         <integer>2</integer>
 </array>
 		</dict>
@@ -211,29 +187,6 @@
 					<key>DstSubfolderSpec</key>
 					<integer>16</integer>
 				</dict>
-        <dict>
-        <key>Class</key>
-        <string>ShellScript</string>
-        <key>ShellPath</key>
-        <string>/bin/sh</string>
-        <key>ShellScript</key>
-        <string>
-        set -e
-
-        mkdir -p "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Headers"
-        mkdir -p "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Resources"
-
-        # Link the "Current" version to "A"
-        /bin/ln -sfh A "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/Current"
-        /bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Headers"
-        /bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Resources"
-        /bin/ln -sfh "Versions/Current/${PROJECT_NAME}" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/${PROJECT_NAME}"
-
-        # The -a ensures that the headers maintain the source modification date so that we don't constantly
-        # cause propagating rebuilds of files that import these headers.
-        /bin/cp -a "${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Headers"
-        </string>
-        </dict>
 			</array>
 
 			<key>Frameworks</key>
@@ -244,13 +197,12 @@
 			<string>com.apple.product-type.library.static</string>
 <key>Dependencies</key>
 <array>
-        <integer>0</integer>
         <integer>2</integer>
 </array>
 		</dict>
 <dict>
   <key>Name</key>
-  <string>___PACKAGENAMEASIDENTIFIER___Resources</string>
+  <string>___PACKAGENAMEASIDENTIFIER____Resources</string>
 	<key>ProductType</key>
 	<string>com.apple.product-type.bundle</string>
 	<key>SharedSettings</key>
@@ -286,7 +238,7 @@
 </dict>
 		<dict>
 			<key>Name</key>
-			<string>___PACKAGENAMEASIDENTIFIER___</string>
+			<string>Framework</string>
 			<key>Ancestors</key>
 			<array>
 				<string>com.apple.dt.unit.base</string>
@@ -307,6 +259,31 @@
       </dict>
       <key>BuildPhases</key>
       <array>
+        <dict>
+          <key>Class</key>
+          <string>ShellScript</string>
+          <key>ShellPath</key>
+          <string>/bin/sh</string>
+          <key>Name</key>
+          <string>Create folder structure</string>
+          <key>ShellScript</key>
+          <string>
+          set -e
+
+          mkdir -p "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Headers"
+          mkdir -p "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Resources"
+
+          # Link the "Current" version to "A"
+          /bin/ln -sfh A "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/Current"
+          /bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Headers"
+          /bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Resources"
+          /bin/ln -sfh "Versions/Current/${PROJECT_NAME}" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/${PROJECT_NAME}"
+
+          # The -a ensures that the headers maintain the source modification date so that we don't constantly
+          # cause propagating rebuilds of files that import these headers.
+          /bin/cp -a "${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Headers"
+          </string>
+        </dict>
           <dict>
               <key>Class</key>
               <string>ShellScript</string>
