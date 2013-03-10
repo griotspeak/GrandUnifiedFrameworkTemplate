@@ -241,6 +241,19 @@ aggregate_ancestors = <<AGGREGATE_ANCESTORS
 				<string>com.apple.dt.unit.base</string>
 				<string>com.apple.dt.unit.aggregate</string>
 			</array>
+			<key>ProductType</key>
+			<string>com.apple.product-type.framework</string>
+      <key>Dependencies</key>
+      <array>
+              <integer>0</integer>
+              <integer>1</integer>
+              <integer>2</integer>
+      </array>
+      <key>SharedSettings</key>
+      <dict>
+      <key>PRODUCT_NAME</key>
+      <string>$(PROJECT_NAME)</string>
+      </dict>
       <key>BuildPhases</key>
       <array>
           <dict>
