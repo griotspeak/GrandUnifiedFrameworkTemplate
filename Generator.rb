@@ -208,7 +208,7 @@ start_aggregate_target = <<START_AGGREGATE_TARGET
 START_AGGREGATE_TARGET
 aggregate_name = <<AGGREGATE_NAME    
 			<key>Name</key>
-			<string>Framework</string>
+			<string>___PACKAGENAME___</string>
 AGGREGATE_NAME
 aggregate_ancestors = <<AGGREGATE_ANCESTORS
 			<key>Ancestors</key>
