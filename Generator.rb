@@ -25,7 +25,7 @@ header = <<HEADER
         <key>TargetIndices</key>
         <array>
           <integer>0</integer>
-          <integer>1</integer>
+          <integer>3</integer>
         </array>
       </dict>
     </dict>
@@ -88,7 +88,7 @@ START_TARGETS
 start_ios_target = <<START_IOS_TARGET
       <dict>
         <key>Name</key>
-        <string>___PACKAGENAME___</string>
+        <string>lib___PACKAGENAME___</string>
         <key>ProductType</key>
         <string>com.apple.product-type.library.static</string>
         <key>Ancestors</key>
@@ -122,6 +122,8 @@ SHARED_FRAMEWORK_SETTINGS
 end_ios_target = <<END_IOS_TARGET
           <key>SDKROOT</key>
           <string>iphoneos</string>
+          <key>PRODUCT_NAME</key>
+          <string>$(PROJECT_NAME)_Mac</string>
         </dict>
         <key>BuildPhases</key>
         <array>
@@ -140,6 +142,41 @@ end_ios_target = <<END_IOS_TARGET
             <string>include/${PRODUCT_NAME}</string>
             <key>DstSubfolderSpec</key>
             <integer>16</integer>
+          </dict>
+          <dict>
+            <key>Class</key>
+            <string>ShellScript</string>
+            <key>ShellPath</key>
+            <string>/bin/sh</string>
+            <key>Name</key>
+            <string>Create folder structure</string>
+            <key>ShellScript</key>
+            <string>
+#Create folder structure
+FW_PRODUCT_NAME="${PRODUCT_NAME}"
+
+set -e
+
+FW_HEADER_DIRECTORY="${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Versions/${FRAMEWORK_VERSION}/Headers"
+FW_RESOURCE_DIRECTORY="${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Versions/${FRAMEWORK_VERSION}/Resources"
+
+mkdir -p ${FW_HEADER_DIRECTORY}
+mkdir -p ${FW_RESOURCE_DIRECTORY}
+
+# Link the "Current" version to "${FRAMEWORK_VERSION}"
+/bin/ln -sfh ${FRAMEWORK_VERSION} "${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Versions/Current"
+/bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Headers"
+/bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Resources"
+/bin/ln -sfh "Versions/Current/${FW_PRODUCT_NAME}" "${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/${FW_PRODUCT_NAME}"
+
+# Copy resources
+FW_RES_BUNDLE_PATH="${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}_Resources.bundle"
+FW_RES_BUNDLE_CONTENTS_PATH="${FW_RES_BUNDLE_PATH}/Contents/Resources"
+
+if [ -d ${FW_RES_BUNDLE_PATH} ]; then
+  cp -R "${FW_RES_BUNDLE_CONTENTS_PATH}/" ${FW_RESOURCE_DIRECTORY}
+fi
+            </string>
           </dict>
         </array>
         <key>Frameworks</key>
@@ -198,6 +235,48 @@ bundle_target = <<BUNDLE_TARGET
         </array>
       </dict>
 BUNDLE_TARGET
+aggregate_target = <<AGGREGATE_TARGET
+      <dict>
+        <key>Name</key>
+        <string>___PACKAGENAME____iOS</string>
+        <key>Ancestors</key>
+        <array>
+          <string>com.apple.dt.unit.base</string>
+          <string>com.apple.dt.unit.aggregate</string>
+        </array>
+        <key>ProductType</key>
+        <string>com.apple.product-type.bundle</string>
+        <key>Dependencies</key>
+        <array>
+          <integer>0</integer>
+          <integer>1</integer>
+        </array>
+        <key>SharedSettings</key>
+        <dict>
+          <key>PRODUCT_NAME</key>
+          <string>$(PROJECT_NAME)_iOS</string>
+          <key>WRAPPER_EXTENSION</key>
+          <string>framework</string>
+          <key>SDKROOT</key>
+          <string>iphoneos</string>
+        </dict>
+        <key>BuildPhases</key>
+        <array>
+          <dict>
+            <key>Class</key>
+            <string>ShellScript</string>
+            <key>ShellPath</key>
+            <string>/bin/sh</string>
+            <key>Name</key>
+            <string>Create folder structure</string>
+            <key>ShellScript</key>
+            <string>
+            # nothing to see here
+            </string>
+          </dict>
+        </array>
+      </dict>
+AGGREGATE_TARGET
 start_mac_target = <<START_MAC_TARGET
       <dict>
         <key>Name</key>
@@ -231,69 +310,27 @@ end_mac_target = <<END_MAC_TARGET
         <key>Dependencies</key>
         <array>
         </array>
-      </dict>
-END_MAC_TARGET
-aggregate_target = <<AGGREGATE_TARGET
-      <dict>
-        <key>Name</key>
-        <string>___PACKAGENAME____iOS</string>
-        <key>Ancestors</key>
-        <array>
-          <string>com.apple.dt.unit.base</string>
-          <string>com.apple.dt.unit.aggregate</string>
-        </array>
-        <key>ProductType</key>
-        <string>com.apple.product-type.framework</string>
-        <key>Dependencies</key>
-        <array>
-          <integer>0</integer>
-          <integer>1</integer>
-        </array>
-        <key>SharedSettings</key>
-        <dict>
-          <key>PRODUCT_NAME</key>
-          <string>$(PROJECT_NAME)_iOS</string>
-        </dict>
         <key>BuildPhases</key>
         <array>
           <dict>
             <key>Class</key>
-            <string>ShellScript</string>
-            <key>ShellPath</key>
-            <string>/bin/sh</string>
-            <key>Name</key>
-            <string>Create folder structure</string>
-            <key>ShellScript</key>
-            <string>
-#Create folder structure
-FW_PRODUCT_NAME="${PRODUCT_NAME}"
-
-set -e
-
-FW_HEADER_DIRECTORY="${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Versions/${FRAMEWORK_VERSION}/Headers"
-FW_RESOURCE_DIRECTORY="${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Versions/${FRAMEWORK_VERSION}/Resources"
-
-mkdir -p ${FW_HEADER_DIRECTORY}
-mkdir -p ${FW_RESOURCE_DIRECTORY}
-
-# Link the "Current" version to "${FRAMEWORK_VERSION}"
-/bin/ln -sfh ${FRAMEWORK_VERSION} "${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Versions/Current"
-/bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Headers"
-/bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Resources"
-/bin/ln -sfh "Versions/Current/${FW_PRODUCT_NAME}" "${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/${FW_PRODUCT_NAME}"
-
-# Copy resources
-FW_RES_BUNDLE_PATH="${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}_Resources.bundle"
-FW_RES_BUNDLE_CONTENTS_PATH="${FW_RES_BUNDLE_PATH}/Contents/Resources"
-
-if [ -d ${FW_RES_BUNDLE_PATH} ]; then
-  cp -R "${FW_RES_BUNDLE_CONTENTS_PATH}/" ${FW_RESOURCE_DIRECTORY}
-fi
-            </string>
+            <string>Sources</string>
+          </dict>
+          <dict>
+            <key>Class</key>
+            <string>Frameworks</string>
+          </dict>
+          <dict>
+            <key>Class</key>
+            <string>Headers</string>
+          </dict>
+          <dict>
+            <key>Class</key>
+            <string>Resources</string>
           </dict>
         </array>
       </dict>
-AGGREGATE_TARGET
+END_MAC_TARGET
 end_targets = <<END_TARGETS
     </array>
 END_TARGETS
@@ -309,10 +346,10 @@ allTheThings = [
   shared_framework_settings,
   end_ios_target,
   bundle_target,
+  aggregate_target,
   start_mac_target,
   shared_framework_settings,
   end_mac_target,
-  aggregate_target,
   end_targets,
   footer
 ]
