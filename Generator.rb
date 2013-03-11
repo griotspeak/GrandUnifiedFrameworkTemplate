@@ -203,73 +203,6 @@ end_mac_target = <<END_MAC_TARGET
 		</dict>
 END_MAC_TARGET
 
-start_aggregate_target = <<START_AGGREGATE_TARGET
-		<dict>
-START_AGGREGATE_TARGET
-aggregate_name = <<AGGREGATE_NAME    
-			<key>Name</key>
-			<string>___PACKAGENAME___</string>
-AGGREGATE_NAME
-aggregate_ancestors = <<AGGREGATE_ANCESTORS
-			<key>Ancestors</key>
-			<array>
-				<string>com.apple.dt.unit.base</string>
-				<string>com.apple.dt.unit.aggregate</string>
-			</array>
-			<key>ProductType</key>
-			<string>com.apple.product-type.framework</string>
-      <key>Dependencies</key>
-      <array>
-              <integer>0</integer>
-              <integer>1</integer>
-              <integer>2</integer>
-      </array>
-      <key>SharedSettings</key>
-      <dict>
-      <key>PRODUCT_NAME</key>
-      <string>$(PROJECT_NAME)</string>
-      </dict>
-      <key>BuildPhases</key>
-      <array>
-        <dict>
-          <key>Class</key>
-          <string>ShellScript</string>
-          <key>ShellPath</key>
-          <string>/bin/sh</string>
-          <key>Name</key>
-          <string>Create folder structure</string>
-          <key>ShellScript</key>
-          <string>
-#Create folder structure
-set -e
-
-FW_HEADER_DIRECTORY="${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Headers"
-FW_RESOURCE_DIRECTORY="${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/A/Resources"
-
-mkdir -p ${FW_HEADER_DIRECTORY}
-mkdir -p ${FW_RESOURCE_DIRECTORY}
-
-# Link the "Current" version to "A"
-/bin/ln -sfh A "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/Current"
-/bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Headers"
-/bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Resources"
-/bin/ln -sfh "Versions/Current/${PROJECT_NAME}" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/${PROJECT_NAME}"
-
-# Copy resources
-FW_RES_BUNDLE_PATH="${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}_Resources.bundle"
-FW_RES_BUNDLE_CONTENTS_PATH="${FW_RES_BUNDLE_PATH}/Contents/Resources"
-
-if [ -d ${FW_RES_BUNDLE_PATH} ]; then
-  cp -R "${FW_RES_BUNDLE_CONTENTS_PATH}/" ${FW_RESOURCE_DIRECTORY}
-fi
-          </string>
-        </dict>
-      </array>
-AGGREGATE_ANCESTORS
-end_aggregate_target = <<END_AGGREGATE_TARGET
-		</dict>
-END_AGGREGATE_TARGET
-
 bundle_target = <<BUNDLE_TARGET
 <dict>
   <key>Name</key>
@@ -315,6 +248,73 @@ bundle_target = <<BUNDLE_TARGET
 	</array>
 </dict>
 BUNDLE_TARGET
+
+start_aggregate_target = <<START_AGGREGATE_TARGET
+		<dict>
+START_AGGREGATE_TARGET
+aggregate_name = <<AGGREGATE_NAME    
+			<key>Name</key>
+			<string>___PACKAGENAME___</string>
+AGGREGATE_NAME
+aggregate_ancestors = <<AGGREGATE_ANCESTORS
+			<key>Ancestors</key>
+			<array>
+				<string>com.apple.dt.unit.base</string>
+				<string>com.apple.dt.unit.aggregate</string>
+			</array>
+			<key>ProductType</key>
+			<string>com.apple.product-type.framework</string>
+      <key>Dependencies</key>
+      <array>
+              <integer>0</integer>
+              <integer>1</integer>
+              <integer>2</integer>
+      </array>
+      <key>SharedSettings</key>
+      <dict>
+      <key>PRODUCT_NAME</key>
+      <string>$(PROJECT_NAME)</string>
+      </dict>
+      <key>BuildPhases</key>
+      <array>
+        <dict>
+          <key>Class</key>
+          <string>ShellScript</string>
+          <key>ShellPath</key>
+          <string>/bin/sh</string>
+          <key>Name</key>
+          <string>Create folder structure</string>
+          <key>ShellScript</key>
+          <string>
+#Create folder structure
+set -e
+
+FW_HEADER_DIRECTORY="${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/${FRAMEWORK_VERSION}/Headers"
+FW_RESOURCE_DIRECTORY="${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/${FRAMEWORK_VERSION}/Resources"
+
+mkdir -p ${FW_HEADER_DIRECTORY}
+mkdir -p ${FW_RESOURCE_DIRECTORY}
+
+# Link the "Current" version to "${FRAMEWORK_VERSION}"
+/bin/ln -sfh ${FRAMEWORK_VERSION} "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/Current"
+/bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Headers"
+/bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Resources"
+/bin/ln -sfh "Versions/Current/${PROJECT_NAME}" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/${PROJECT_NAME}"
+
+# Copy resources
+FW_RES_BUNDLE_PATH="${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}_Resources.bundle"
+FW_RES_BUNDLE_CONTENTS_PATH="${FW_RES_BUNDLE_PATH}/Contents/Resources"
+
+if [ -d ${FW_RES_BUNDLE_PATH} ]; then
+  cp -R "${FW_RES_BUNDLE_CONTENTS_PATH}/" ${FW_RESOURCE_DIRECTORY}
+fi
+          </string>
+        </dict>
+      </array>
+AGGREGATE_ANCESTORS
+end_aggregate_target = <<END_AGGREGATE_TARGET
+		</dict>
+END_AGGREGATE_TARGET
 
 end_targets = <<END_TARGETS
 	</array>
