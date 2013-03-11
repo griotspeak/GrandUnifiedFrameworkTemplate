@@ -7,6 +7,7 @@ header = <<HEADER
 	<array>
 		<string>com.apple.dt.unit.base</string>
     <string>com.apple.dt.unit.iOSReferenceCounting</string>
+    <string>com.apple.dt.unit.macReferenceCounting</string>
 	</array>
 	<key>Concrete</key>
 	<true/>
@@ -66,7 +67,7 @@ header = <<HEADER
 								<key>Identifier</key>
 								<string>com.apple.dt.unit.cocoaTouchFrameworkUnitTestBundle</string>
 								<key>Name</key>
-								<string>___PACKAGENAME___Tests</string>
+								<string>___PACKAGENAME____Tests</string>
 							</dict>
 						</array>
 					</dict>
@@ -80,18 +81,18 @@ start_targets = <<START_TARGETS
 	<array>
 START_TARGETS
 start_ios_target = <<START_IOS_TARGET
-		<dict>
-			<key>Name</key>
-			<string>___PACKAGENAME___</string>
-	<key>Ancestors</key>
-	<array>
-		<string>com.apple.dt.unit.base</string>
-		<string>com.apple.dt.unit.iPhoneBase</string>
-	</array>
-			<key>SharedSettings</key>
-			<dict>
-      <key>PRODUCT_NAME</key>
-      <string>$(PROJECT_NAME)_iOS</string>
+    <dict>
+      <key>Name</key>
+      <string>___PACKAGENAME___</string>
+      <key>ProductType</key>
+      <string>com.apple.product-type.library.static</string>
+      <key>Ancestors</key>
+      <array>
+        <string>com.apple.dt.unit.base</string>
+        <string>com.apple.dt.unit.iPhoneBase</string>
+      </array>
+      <key>SharedSettings</key>
+      <dict>
 START_IOS_TARGET
 shared_framework_settings = <<SHARED_FRAMEWORK_SETTINGS
         <key>DSTROOT</key>
@@ -138,8 +139,6 @@ end_ios_target = <<END_IOS_TARGET
 			<array>
 				<string>Foundation</string>
 			</array>
-			<key>ProductType</key>
-			<string>com.apple.product-type.library.static</string>
       <key>Dependencies</key>
       <array>
         <integer>1</integer>
@@ -197,6 +196,12 @@ start_mac_target = <<START_MAC_TARGET
       <string>___PACKAGENAME____Mac</string>
       <key>ProductType</key>
       <string>com.apple.product-type.framework</string>
+    	<key>Ancestors</key>
+    	<array>
+    		<string>com.apple.dt.unit.bundleBase</string>
+    		<string>com.apple.dt.unit.macBase</string>
+    		<string>com.apple.dt.unit.macReferenceCounting</string>
+    	</array>
       <key>SharedSettings</key>
       <dict>
         <key>WRAPPER_EXTENSION</key>
@@ -251,22 +256,24 @@ aggregate_target = <<AGGREGATE_TARGET
           <key>ShellScript</key>
           <string>
 #Create folder structure
+FW_PRODUCT_NAME="${PRODUCT_NAME}"
+
 set -e
 
-FW_HEADER_DIRECTORY="${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/${FRAMEWORK_VERSION}/Headers"
-FW_RESOURCE_DIRECTORY="${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/${FRAMEWORK_VERSION}/Resources"
+FW_HEADER_DIRECTORY="${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Versions/${FRAMEWORK_VERSION}/Headers"
+FW_RESOURCE_DIRECTORY="${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Versions/${FRAMEWORK_VERSION}/Resources"
 
 mkdir -p ${FW_HEADER_DIRECTORY}
 mkdir -p ${FW_RESOURCE_DIRECTORY}
 
 # Link the "Current" version to "${FRAMEWORK_VERSION}"
-/bin/ln -sfh ${FRAMEWORK_VERSION} "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Versions/Current"
-/bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Headers"
-/bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/Resources"
-/bin/ln -sfh "Versions/Current/${PROJECT_NAME}" "${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}.framework/${PROJECT_NAME}"
+/bin/ln -sfh ${FRAMEWORK_VERSION} "${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Versions/Current"
+/bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Headers"
+/bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Resources"
+/bin/ln -sfh "Versions/Current/${FW_PRODUCT_NAME}" "${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/${FW_PRODUCT_NAME}"
 
 # Copy resources
-FW_RES_BUNDLE_PATH="${BUILT_PRODUCTS_DIR}/${PROJECT_NAME}_Resources.bundle"
+FW_RES_BUNDLE_PATH="${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}_Resources.bundle"
 FW_RES_BUNDLE_CONTENTS_PATH="${FW_RES_BUNDLE_PATH}/Contents/Resources"
 
 if [ -d ${FW_RES_BUNDLE_PATH} ]; then
