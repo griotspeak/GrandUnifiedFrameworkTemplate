@@ -261,7 +261,7 @@ FW_RES_BUNDLE_CONTENTS_PATH="${FW_RES_BUNDLE_PATH}/Contents/Resources"
 
 if [ -d ${FW_RES_BUNDLE_PATH} ]; then
   cp -R "${FW_RES_BUNDLE_CONTENTS_PATH}/" ${FW_RESOURCE_DIRECTORY}
-fi        
+fi
           </string>
         </dict>
       </array>
@@ -288,6 +288,8 @@ bundle_target = <<BUNDLE_TARGET
     <string>iphonesimulator iphoneos macosx</string>
     <key>VALID_ARCHS</key>
     <string>i386 x86_64 arm7 arm7s</string>
+    <key>ARCHS</key>
+    <string>$(ARCHS_STANDARD_64_BIT)</string>
     <key>PRODUCT_NAME</key>
     <string>$(TARGET_NAME)</string>
 	</dict>
