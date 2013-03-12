@@ -88,7 +88,7 @@ START_TARGETS
 start_ios_target = <<START_IOS_TARGET
       <dict>
         <key>Name</key>
-        <string>lib___PACKAGENAME___</string>
+        <string>lib___PACKAGENAME____iOS</string>
         <key>ProductType</key>
         <string>com.apple.product-type.library.static</string>
         <key>Ancestors</key>
@@ -123,7 +123,7 @@ end_ios_target = <<END_IOS_TARGET
           <key>SDKROOT</key>
           <string>iphoneos</string>
           <key>PRODUCT_NAME</key>
-          <string>$(PROJECT_NAME)_Mac</string>
+          <string>$(PROJECT_NAME)</string>
         </dict>
         <key>BuildPhases</key>
         <array>
@@ -152,10 +152,10 @@ end_ios_target = <<END_IOS_TARGET
             <string>Create folder structure</string>
             <key>ShellScript</key>
             <string>
+set -e
+
 #Create folder structure
 FW_PRODUCT_NAME="${PRODUCT_NAME}"
-
-set -e
 
 FW_HEADER_DIRECTORY="${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Versions/${FRAMEWORK_VERSION}/Headers"
 FW_RESOURCE_DIRECTORY="${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Versions/${FRAMEWORK_VERSION}/Resources"
@@ -171,11 +171,11 @@ mkdir -p ${FW_RESOURCE_DIRECTORY}
 
 # Copy resources
 FW_RES_BUNDLE_PATH="${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}_Resources.bundle"
-FW_RES_BUNDLE_CONTENTS_PATH="${FW_RES_BUNDLE_PATH}/Contents/Resources"
 
 if [ -d ${FW_RES_BUNDLE_PATH} ]; then
-  cp -R "${FW_RES_BUNDLE_CONTENTS_PATH}/" ${FW_RESOURCE_DIRECTORY}
+  cp -R "${FW_RES_BUNDLE_PATH}/" ${FW_RESOURCE_DIRECTORY}
 fi
+
             </string>
           </dict>
         </array>
@@ -259,6 +259,8 @@ aggregate_target = <<AGGREGATE_TARGET
           <string>framework</string>
           <key>SDKROOT</key>
           <string>iphoneos</string>
+          <key>MACH_O_TYPE</key>
+          <string>mh_object</string>
         </dict>
         <key>BuildPhases</key>
         <array>
@@ -271,7 +273,50 @@ aggregate_target = <<AGGREGATE_TARGET
             <string>Create folder structure</string>
             <key>ShellScript</key>
             <string>
-            # nothing to see here
+set -e
+set +u
+# Avoid recursively calling this script.
+if [[ $FW_MASTER_SCRIPT_RUNNING ]]
+then
+    exit 0
+fi
+set -u
+export FW_MASTER_SCRIPT_RUNNING=1
+
+FW_TARGET_NAME=${PRODUCT_NAME}
+FW_EXECUTABLE_PATH="lib${FW_TARGET_NAME}.a"
+FW_WRAPPER_NAME="${FW_TARGET_NAME}.framework"
+FW_SDK_PLATFORM=${EFFECTIVE_PLATFORM_NAME:1}
+FW_SDK_VERSION=${IPHONEOS_DEPLOYMENT_TARGET}
+
+if [[ "${FW_SDK_PLATFORM}" = "iphoneos" ]]
+then
+    FW_OTHER_PLATFORM=iphonesimulator
+else
+    FW_OTHER_PLATFORM=iphoneos
+fi
+
+# replace iphoneos "platform" with "other platform" in BUILT_PRODUCTS_DIR
+# substring replacement ${string/substring/replacement}
+FW_OTHER_BUILT_PRODUCTS_DIR=${BUILT_PRODUCTS_DIR/$FW_SDK_PLATFORM/$FW_OTHER_PLATFORM}
+
+echo "FW_TARGET_NAME = ${FW_TARGET_NAME}"
+echo "FW_EXECUTABLE_PATH = ${FW_EXECUTABLE_PATH}"
+echo "FW_WRAPPER_NAME = ${FW_WRAPPER_NAME}"
+echo "FW_SDK_PLATFORM = ${FW_SDK_PLATFORM}"
+echo "FW_OTHER_PLATFORM = ${FW_OTHER_PLATFORM}"
+echo "FW_SDK_VERSION = ${FW_SDK_VERSION}"
+echo "BUILT_PRODUCTS_DIR = ${BUILT_PRODUCTS_DIR}"
+echo "FW_OTHER_BUILT_PRODUCTS_DIR = ${FW_OTHER_BUILT_PRODUCTS_DIR}"
+
+# Build the other platform.
+xcodebuild -project "${PROJECT_FILE_PATH}" -target "${TARGET_NAME}" -configuration "${CONFIGURATION}" -sdk ${FW_OTHER_PLATFORM}${FW_SDK_VERSION} BUILD_DIR="${BUILD_DIR}" OBJROOT="${OBJROOT}" BUILD_ROOT="${BUILD_ROOT}" SYMROOT="${SYMROOT}" $ACTION
+
+# Smash the two static libraries into one fat binary and store it in the .framework
+lipo -create "${BUILT_PRODUCTS_DIR}/${FW_EXECUTABLE_PATH}" "${FW_OTHER_BUILT_PRODUCTS_DIR}/${FW_EXECUTABLE_PATH}" -output "${BUILT_PRODUCTS_DIR}/${FW_WRAPPER_NAME}/Versions/A/${FW_TARGET_NAME}"
+
+# Copy the binary to the other architecture folder to have a complete framework in both.
+cp -a "${BUILT_PRODUCTS_DIR}/${FW_WRAPPER_NAME}/Versions/A/${FW_TARGET_NAME}" "${FW_OTHER_BUILT_PRODUCTS_DIR}/${FW_WRAPPER_NAME}/Versions/A/${FW_TARGET_NAME}"
             </string>
           </dict>
         </array>
@@ -303,6 +348,8 @@ start_mac_target = <<START_MAC_TARGET
           <string>1</string>
           <key>PRODUCT_NAME</key>
           <string>$(PROJECT_NAME)_Mac</string>
+          <key>ARCHS</key>
+          <string>$(ARCHS_STANDARD_64_BIT)</string>
 START_MAC_TARGET
 #SHARED_FRAMEWORK_SETTINGS goes here as well
 end_mac_target = <<END_MAC_TARGET
