@@ -123,7 +123,7 @@ end_ios_target = <<END_IOS_TARGET
           <key>SDKROOT</key>
           <string>iphoneos</string>
           <key>PRODUCT_NAME</key>
-          <string>$(PROJECT_NAME)</string>
+          <string>$(PROJECT_NAME)_iOS</string>
         </dict>
         <key>BuildPhases</key>
         <array>
@@ -192,7 +192,7 @@ END_IOS_TARGET
 bundle_target = <<BUNDLE_TARGET
       <dict>
         <key>Name</key>
-        <string>___PACKAGENAMEASIDENTIFIER____Resources</string>
+        <string>___PACKAGENAMEASIDENTIFIER____iOS_Resources</string>
         <key>ProductType</key>
         <string>com.apple.product-type.bundle</string>
         <key>SharedSettings</key>
