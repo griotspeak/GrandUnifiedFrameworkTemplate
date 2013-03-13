@@ -12,7 +12,6 @@ header = <<HEADER
     <key>Platforms</key>
     <array>
       <string>com.apple.platform.iphoneos</string>
-      <string>com.apple.platform.macosx</string>
     </array>
     <key>Concrete</key>
     <true/>
@@ -81,6 +80,8 @@ header = <<HEADER
     <dict>
       <key>SharedSettings</key>
       <dict>
+        <key>SDKROOT</key>
+        <string>iphoneos</string>
       </dict>
     </dict>
     <key>Nodes</key>
@@ -241,11 +242,7 @@ bundle_target = <<BUNDLE_TARGET
           <key>COMBINE_HIDPI_IMAGES</key>
           <string>YES</string>
           <key>SUPPORTED_PLATFORMS</key>
-          <string>iphonesimulator iphoneos macosx</string>
-          <key>VALID_ARCHS</key>
-          <string>i386 x86_64 arm7 arm7s</string>
-          <key>ARCHS</key>
-          <string>$(ARCHS_STANDARD_64_BIT)</string>
+          <string>iphonesimulator iphoneos</string>
           <key>PRODUCT_NAME</key>
           <string>$(TARGET_NAME)</string>
         </dict>
@@ -387,6 +384,8 @@ start_mac_target = <<START_MAC_TARGET
           <string>$(PROJECT_NAME)_Mac</string>
           <key>ARCHS</key>
           <string>$(ARCHS_STANDARD_64_BIT)</string>
+          <key>CONFIGURATION_BUILD_DIR</key>
+          <string>$(BUILD_DIR)/$(CONFIGURATION)</string>
 START_MAC_TARGET
 #SHARED_FRAMEWORK_SETTINGS goes here as well
 end_mac_target = <<END_MAC_TARGET
