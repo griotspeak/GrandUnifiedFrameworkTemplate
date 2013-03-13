@@ -28,6 +28,48 @@ header = <<HEADER
           <integer>3</integer>
         </array>
       </dict>
+      <key>___PACKAGENAMEASIDENTIFIER___Resources.h</key>
+      <dict>
+        <key>Path</key>
+        <string>___PACKAGENAMEASIDENTIFIER___Resources.h</string>
+        <key>TargetIndices</key>
+        <array>
+          <integer>0</integer>
+          <integer>3</integer>
+        </array>
+        <key>Group</key>
+        <array>
+          <string>Utility Classes</string>
+        </array>
+      </dict>
+      <key>___PACKAGENAMEASIDENTIFIER___Resources+Private.h</key>
+      <dict>
+        <key>Path</key>
+        <string>___PACKAGENAMEASIDENTIFIER___Resources+Private.h</string>
+        <key>TargetIndices</key>
+        <array>
+          <integer>0</integer>
+          <integer>3</integer>
+        </array>
+        <key>Group</key>
+        <array>
+          <string>Utility Classes</string>
+        </array>
+      </dict>
+      <key>___PACKAGENAMEASIDENTIFIER___Resources.m</key>
+      <dict>
+        <key>Path</key>
+        <string>___PACKAGENAMEASIDENTIFIER___Resources.m</string>
+        <key>TargetIndices</key>
+        <array>
+          <integer>0</integer>
+          <integer>3</integer>
+        </array>
+        <key>Group</key>
+        <array>
+          <string>Utility Classes</string>
+        </array>
+      </dict>
     </dict>
     <key>Description</key>
     <string>This template builds a static library that links against the Foundation framework.</string>
@@ -45,6 +87,9 @@ header = <<HEADER
     <array>
       <string>___PACKAGENAME___-Prefix.pch:objC:importFoundation</string>
       <string>___PACKAGENAMEASIDENTIFIER___.h</string>
+      <string>___PACKAGENAMEASIDENTIFIER___Resources.h</string>
+      <string>___PACKAGENAMEASIDENTIFIER___Resources+Private.h</string>
+      <string>___PACKAGENAMEASIDENTIFIER___Resources.m</string>
     </array>
     <key>Options</key>
     <array>
@@ -137,11 +182,7 @@ end_ios_target = <<END_IOS_TARGET
           </dict>
           <dict>
             <key>Class</key>
-            <string>CopyFiles</string>
-            <key>DstPath</key>
-            <string>include/${PRODUCT_NAME}</string>
-            <key>DstSubfolderSpec</key>
-            <integer>16</integer>
+            <string>Headers</string>
           </dict>
           <dict>
             <key>Class</key>
@@ -158,24 +199,20 @@ set -e
 FW_PRODUCT_NAME="${PRODUCT_NAME}"
 
 FW_HEADER_DIRECTORY="${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Versions/${FRAMEWORK_VERSION}/Headers"
-FW_RESOURCE_DIRECTORY="${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Versions/${FRAMEWORK_VERSION}/Resources"
 
 mkdir -p ${FW_HEADER_DIRECTORY}
-mkdir -p ${FW_RESOURCE_DIRECTORY}
 
 # Link the "Current" version to "${FRAMEWORK_VERSION}"
 /bin/ln -sfh ${FRAMEWORK_VERSION} "${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Versions/Current"
 /bin/ln -sfh Versions/Current/Headers "${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Headers"
-/bin/ln -sfh Versions/Current/Resources "${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/Resources"
+
 /bin/ln -sfh "Versions/Current/${FW_PRODUCT_NAME}" "${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}.framework/${FW_PRODUCT_NAME}"
 
-# Copy resources
-FW_RES_BUNDLE_PATH="${BUILT_PRODUCTS_DIR}/${FW_PRODUCT_NAME}_Resources.bundle"
-
-if [ -d ${FW_RES_BUNDLE_PATH} ]; then
-  cp -R "${FW_RES_BUNDLE_PATH}/" ${FW_RESOURCE_DIRECTORY}
-fi
-
+# Copy headers
+BUILT_PRODUCTS_HEADER_DIR="${BUILT_PRODUCTS_DIR}/include/${PRODUCT_NAME}/"
+if [ -d ${BUILT_PRODUCTS_HEADER_DIR} ]; then
+  cp -R ${BUILT_PRODUCTS_HEADER_DIR} ${FW_HEADER_DIRECTORY}
+fi            
             </string>
           </dict>
         </array>
