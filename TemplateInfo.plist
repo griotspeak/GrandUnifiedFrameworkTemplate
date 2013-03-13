@@ -129,7 +129,7 @@
     <array>
       <dict>
         <key>Name</key>
-        <string>lib___PACKAGENAME____iOS</string>
+        <string>Static Library</string>
         <key>ProductType</key>
         <string>com.apple.product-type.library.static</string>
         <key>Ancestors</key>
@@ -160,7 +160,7 @@
           <key>SDKROOT</key>
           <string>iphoneos</string>
           <key>PRODUCT_NAME</key>
-          <string>$(PROJECT_NAME)_iOS</string>
+          <string>$(PROJECT_NAME)</string>
         </dict>
         <key>BuildPhases</key>
         <array>
@@ -219,7 +219,7 @@ fi
       </dict>
       <dict>
         <key>Name</key>
-        <string>___PACKAGENAMEASIDENTIFIER____iOS_Resources</string>
+        <string>___PACKAGENAMEASIDENTIFIER____Resources</string>
         <key>ProductType</key>
         <string>com.apple.product-type.bundle</string>
         <key>SharedSettings</key>
@@ -275,7 +275,7 @@ fi
         <key>SharedSettings</key>
         <dict>
           <key>PRODUCT_NAME</key>
-          <string>$(PROJECT_NAME)_iOS</string>
+          <string>$(PROJECT_NAME)</string>
           <key>WRAPPER_EXTENSION</key>
           <string>framework</string>
           <key>SDKROOT</key>
@@ -366,7 +366,7 @@ cp -a "${BUILT_PRODUCTS_DIR}/${FW_WRAPPER_NAME}/Versions/A/${FW_TARGET_NAME}" "$
           <key>DYLIB_CURRENT_VERSION</key>
           <string>1</string>
           <key>PRODUCT_NAME</key>
-          <string>$(PROJECT_NAME)_Mac</string>
+          <string>$(PROJECT_NAME)</string>
           <key>ARCHS</key>
           <string>$(ARCHS_STANDARD_64_BIT)</string>
           <key>CONFIGURATION_BUILD_DIR</key>
