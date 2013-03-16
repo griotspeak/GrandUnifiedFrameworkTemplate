@@ -244,7 +244,7 @@ bundle_target = <<BUNDLE_TARGET
           <key>SUPPORTED_PLATFORMS</key>
           <string>iphonesimulator iphoneos</string>
           <key>PRODUCT_NAME</key>
-          <string>$(TARGET_NAME)</string>
+          <string>$(PROJECT_NAME)</string>
         </dict>
         <key>Configurations</key>
         <!-- Target Configuration -->
@@ -437,4 +437,6 @@ allTheThings = [
   footer
 ]
 
-puts allTheThings
+dirname = Pathname.new(File.dirname(__FILE__)) + "TemplateInfo.plist"
+File.open(dirname, 'w') { |file| file.puts(allTheThings) }
+puts "All done!"

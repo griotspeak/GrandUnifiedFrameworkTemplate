@@ -8,7 +8,7 @@ static NSBundle *_bundle = nil;
 + (NSBundle *)bundle {
   NSString *path = nil;
     if (_bundle == nil) {
-        path = [[NSBundle mainBundle] pathForResource:@"___PACKAGENAMEASIDENTIFIER____Resources"
+        path = [[NSBundle mainBundle] pathForResource:@"___PACKAGENAMEASIDENTIFIER___"
                                                ofType:@"bundle"];
         if (_bundle == nil) {
             path = [[NSBundle mainBundle] pathForResource:@"___PACKAGENAMEASIDENTIFIER___" 

@@ -233,7 +233,7 @@ fi
           <key>SUPPORTED_PLATFORMS</key>
           <string>iphonesimulator iphoneos</string>
           <key>PRODUCT_NAME</key>
-          <string>$(TARGET_NAME)</string>
+          <string>$(PROJECT_NAME)</string>
         </dict>
         <key>Configurations</key>
         <!-- Target Configuration -->
