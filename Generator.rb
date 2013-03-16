@@ -71,7 +71,7 @@ header = <<HEADER
       </dict>
     </dict>
     <key>Description</key>
-    <string>This template builds a static library that links against the Foundation framework.</string>
+    <string>This template builds a framework for OS X and iOS that links against the Foundation framework.</string>
     <key>Identifier</key>
     <string>com.buttonsAndLights.cocoaTouchStaticLibrary</string>
     <key>Kind</key>

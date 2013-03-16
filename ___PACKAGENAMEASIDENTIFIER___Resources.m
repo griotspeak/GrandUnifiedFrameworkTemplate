@@ -15,8 +15,8 @@ static NSBundle *_bundle = nil;
                                                    ofType:@"framework"];
 
         }
+        _bundle = [NSBundle bundleWithPath:path];
     }
-    _bundle = [NSBundle bundleWithPath:path];
     return _bundle;
 }
 
