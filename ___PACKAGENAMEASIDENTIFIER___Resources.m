@@ -10,12 +10,11 @@ static NSBundle *_bundle = nil;
     if (_bundle == nil) {
         path = [[NSBundle mainBundle] pathForResource:@"___PACKAGENAMEASIDENTIFIER___"
                                                ofType:@"bundle"];
-        if (_bundle == nil) {
-            path = [[NSBundle mainBundle] pathForResource:@"___PACKAGENAMEASIDENTIFIER___" 
-                                                   ofType:@"framework"];
-
+        if (path == nil) {
+            _bundle = [NSBundle bundleForClass:self.class];
+        } else {
+            _bundle = [NSBundle bundleWithPath:path];
         }
-        _bundle = [NSBundle bundleWithPath:path];
     }
     return _bundle;
 }
