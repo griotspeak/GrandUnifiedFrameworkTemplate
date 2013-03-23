@@ -24,6 +24,7 @@ Distribute the .framework.
 
 ##Inspiration #
 https://github.com/jverkoey/iOS-Framework
+https://github.com/kstenerud/iOS-Universal-Framework
 
 ##That is all #
 TJ Usiyan
