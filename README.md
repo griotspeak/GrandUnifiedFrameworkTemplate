@@ -2,10 +2,11 @@
 #"Grand Unified Framework" Template
 This is an Xcode project template which is meant to ease the creation of cross platform (iOS & Mac) Frameworks. 
 
-##Installation ##
-Please place this repo at the path listed below for maximum pleasure.
+##Installation: (The repo directory must end with '.xctemplate') ###
 
-~/Library/Developer/Xcode/Templates/Project Templates/Framework & Library
+ Please place this repo at the path listed below for maximum pleasure.
+
+    ~/Library/Developer/Xcode/Templates/Project Templates/Framework & Library
 
 
 ##Use ##
@@ -23,8 +24,8 @@ Distribute the .framework created by the <Project_Name>_iOS target and the .bund
 Distribute the .framework.
 
 ##Inspiration #
-https://github.com/jverkoey/iOS-Framework
-https://github.com/kstenerud/iOS-Universal-Framework
+- https://github.com/jverkoey/iOS-Framework
+- https://github.com/kstenerud/iOS-Universal-Framework
 
 ##That is all #
 TJ Usiyan
